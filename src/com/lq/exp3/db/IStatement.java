@@ -10,7 +10,7 @@ public interface IStatement<E> {
     /**
      * 查询所有
      */
-    IResult executeSelAll(Class<E> eClass) throws IOException;
+    IResult<E> executeSelAll();
 
     /**
      * 根据条件选择一个或多个
@@ -18,28 +18,28 @@ public interface IStatement<E> {
      * @param where 条件筛选回调
      */
 
-    IResult<E> executeSel(Class<E> eClass, IWhereCallback where) throws IOException;
+    IResult<E> executeSel( IWhereCallback where);
 
     /**
      * 新增
      *
      * @param obj 　do对象
      */
-    IResult executeAdd(E obj);
+    IResult<E> executeAdd(E obj);
 
     /**
      * 根据条件更新一个或多个
      *
      * @param where 条件筛选回调
      */
-    IResult executeUpd(IWhereCallback where);
+    IResult<E> executeUpd(IWhereCallback where);
 
     /**
      * 根据条件删除一个或多个
      *
      * @param where 条件筛选回调
      */
-    IResult executeDel(IWhereCallback where);
+    IResult<E> executeDel(IWhereCallback where);
 
 
 }

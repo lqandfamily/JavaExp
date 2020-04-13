@@ -5,7 +5,7 @@ import com.lq.exp3.excption.DataBaseException;
 /**
  * 数据库接口
  */
-public interface  IDataBaseManager<E> {
+public interface  IDataBaseManager {
     /**
      * 连接到数据库并返回数据库连接对象
      * @param host　主机
@@ -15,10 +15,10 @@ public interface  IDataBaseManager<E> {
      * @return 数据库连接对象
      * @throws DataBaseException 连接错误时抛出异常
      */
-   IConnection<E>  getConnection(String host,int port,String username,String password) throws DataBaseException;
+   IConnection  getConnection(String host,int port,String username,String password) throws DataBaseException;
 
     /**
      * 关闭前务必保证所有未提交数据保存到数据库
      */
-  void close();
+  void close() throws DataBaseException;
 }
