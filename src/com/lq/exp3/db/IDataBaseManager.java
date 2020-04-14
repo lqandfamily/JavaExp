@@ -1,6 +1,6 @@
 package com.lq.exp3.db;
 
-import com.lq.exp3.excption.DataBaseException;
+import com.lq.exp3.db.excption.DataBaseException;
 
 /**
  * 数据库接口

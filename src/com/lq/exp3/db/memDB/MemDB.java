@@ -1,9 +1,6 @@
 package com.lq.exp3.db.memDB;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 内存型数据库的核心存储
@@ -51,6 +48,8 @@ class MemDB {
 class MemTable {
     //表名
     private String tbName;
+    //字段
+    private List<String> fieldList;
     //所有行数据
     private List<String> rowData;
 
@@ -58,6 +57,15 @@ class MemTable {
     public MemTable(String tbName) {
         this.tbName = tbName;
         rowData = new ArrayList<>();
+        fieldList = new ArrayList<>();
+    }
+
+    /**
+     * 读取并设置字段
+     */
+    public void readField(){
+        String[] fieldStrArr = rowData.get(0).split("\\s+");
+        Collections.addAll(fieldList, fieldStrArr);
     }
 
     /**

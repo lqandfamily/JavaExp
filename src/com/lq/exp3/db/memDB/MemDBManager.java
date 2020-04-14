@@ -2,7 +2,7 @@ package com.lq.exp3.db.memDB;
 
 import com.lq.exp3.db.IConnection;
 import com.lq.exp3.db.IDataBaseManager;
-import com.lq.exp3.excption.DataBaseException;
+import com.lq.exp3.db.excption.DataBaseException;
 
 import java.io.*;
 import java.util.List;
@@ -44,19 +44,24 @@ public class MemDBManager implements IDataBaseManager {
      * @throws DataBaseException 　e
      */
     private void readTables(MemDB db, File dbFile, String charset) throws DataBaseException {
-        File[] childList = dbFile.listFiles((file, s) -> s.endsWith(".txt"));
+        File[] childList = dbFile.listFiles((file, s) -> s.endsWith(DBConfig.DB_FILE_SUFFIX));
         //读取存在的所有表
         if (childList != null) {
             BufferedReader br = null;
             try {
                 for (File child : childList) {
                     br = new BufferedReader(new InputStreamReader(new FileInputStream(child), charset));
-                    MemTable table = new MemTable(child.getName());
+                    MemTable table = new MemTable(child.getName().replace(DBConfig.DB_FILE_SUFFIX,""));
                     String line = "";
+
                     while ((line = br.readLine()) != null) {
                         table.addRow(line);
                     }
                     this.db.addTable(table);
+                    /*
+                     * 添加字段
+                     */
+                    table.readField();
                 }
                 //子文件 --> 表
             } catch (FileNotFoundException e) {

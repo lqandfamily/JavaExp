@@ -2,7 +2,7 @@ package com.lq.exp3.db.memDB;
 
 import com.lq.exp3.db.IConnection;
 import com.lq.exp3.db.IStatement;
-import com.lq.exp3.excption.DataBaseException;
+import com.lq.exp3.db.excption.DataBaseException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +34,8 @@ public class MemConnection implements IConnection {
         if((table = db.getTables().get(tableName))!=null){
             statement = new MemStatement<E>(table);
             statementMap.put(tableName,statement);
+        }else {
+            throw new DataBaseException("不存在该表: " + tableName);
         }
         return statement;
     }

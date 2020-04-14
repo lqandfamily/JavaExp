@@ -3,15 +3,15 @@ package com.lq.test.db;
 import com.lq.exp3.db.*;
 import com.lq.exp3.db.memDB.MemDBManager;
 import com.lq.exp3.entity.Inventory;
-import com.lq.exp3.excption.DataBaseException;
+import com.lq.exp3.db.excption.DataBaseException;
 
 import java.io.IOException;
 
 public class TestDB {
     public static void main(String[] args) throws DataBaseException, IOException {
         MemDBManager manager = new MemDBManager();
-        IConnection connection = manager.getConnection("/home/blue/Projctes/IdeaProjects/JavaHomework/test/com/lq/test/db/textDb/", "UTF-8");
-        IStatement<Inventory> statement = connection.createStatementByTableName("Inventory.txt",Inventory.class);
+        IConnection connection = manager.getConnection("/home/blue/Projctes/IdeaProjects/JavaHomework/test/com/lq/test/db/textDb", "UTF-8");
+        IStatement<Inventory> statement = connection.createStatementByTableName("Inventory",Inventory.class);
         //测试读取所有
         IResult<Inventory> result = statement.executeSelAll();
 

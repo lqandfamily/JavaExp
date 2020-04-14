@@ -1,4 +1,4 @@
-package com.lq.exp3.excption;
+package com.lq.exp3.db.excption;
 
 /**
  * 数据库异常
@@ -12,8 +12,12 @@ public class DataBaseException extends Exception {
     }
 
     @Override
+    public String getMessage() {
+        return super.getMessage() + "\nERROR MSG:" + errMsg;
+    }
+
+    @Override
     public void printStackTrace() {
         super.printStackTrace();
-        System.err.println("ERROR MSG:" + errMsg);
     }
 }

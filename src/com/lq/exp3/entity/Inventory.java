@@ -5,9 +5,9 @@ package com.lq.exp3.entity;
  */
 public class Inventory {
     //货物编号
-    private String ItemNumber;
+    private String itemNumber;
     //货物数量
-    private int Quantity;
+    private int quantity;
     //供应商编号
     private String supplier;
     //货物描述
@@ -17,26 +17,26 @@ public class Inventory {
     }
 
     public Inventory(String itemNumber, int quantity, String supplier, String description) {
-        ItemNumber = itemNumber;
-        Quantity = quantity;
+        this.itemNumber = itemNumber;
+        this.quantity = quantity;
         this.supplier = supplier;
         this.description = description;
     }
 
     public String getItemNumber() {
-        return ItemNumber;
+        return itemNumber;
     }
 
     public void setItemNumber(String itemNumber) {
-        ItemNumber = itemNumber;
+        this.itemNumber = itemNumber;
     }
 
     public int getQuantity() {
-        return Quantity;
+        return quantity;
     }
 
     public void setQuantity(int quantity) {
-        Quantity = quantity;
+        this.quantity = quantity;
     }
 
     public String getSupplier() {
