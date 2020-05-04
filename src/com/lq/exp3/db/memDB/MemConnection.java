@@ -25,8 +25,14 @@ public class MemConnection implements IConnection {
     }
 
     @Override
-    public <E> MemStatement<E> createStatementByTableName(String tableName, Class<E> eClass) throws DataBaseException {
+    public <E> MemStatement<E> createStatementByTableName(String tableName, Class<?> eClass) throws DataBaseException {
         MemStatement<E> statement = null;
+
+        //todo:测试反射获取类型
+//        ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
+//        System.out.println(parameterizedType.getClass());
+
+
         if((statement = (MemStatement<E>)statementMap.get(tableName))!=null)     {
             return statement;
         }

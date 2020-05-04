@@ -5,8 +5,8 @@ import com.lq.exp3.db.IDataBaseManager;
 import com.lq.exp3.db.excption.DataBaseException;
 
 import java.io.*;
-import java.util.List;
-import java.util.Map;
+import java.sql.Connection;
+import java.util.*;
 
 /**
  * 内存型数据库管理器
@@ -39,8 +39,8 @@ public class MemDBManager implements IDataBaseManager {
     /**
      * 从数据库中读取所有的表到内存中
      *
-     * @param db 内部数据库表
-     * @param dbFile    数据库文件夹
+     * @param db     内部数据库表
+     * @param dbFile 数据库文件夹
      * @throws DataBaseException 　e
      */
     private void readTables(MemDB db, File dbFile, String charset) throws DataBaseException {
@@ -51,11 +51,13 @@ public class MemDBManager implements IDataBaseManager {
             try {
                 for (File child : childList) {
                     br = new BufferedReader(new InputStreamReader(new FileInputStream(child), charset));
-                    MemTable table = new MemTable(child.getName().replace(DBConfig.DB_FILE_SUFFIX,""));
+                    MemTable table = new MemTable(child.getName().replace(DBConfig.DB_FILE_SUFFIX, ""));
                     String line = "";
 
                     while ((line = br.readLine()) != null) {
-                        table.addRow(line);
+                        String[] split = line.split("\\s+");
+                        List<String> rowList = new ArrayList<>(Arrays.asList(split));
+                        table.addRow(rowList);
                     }
                     this.db.addTable(table);
                     /*
@@ -82,10 +84,11 @@ public class MemDBManager implements IDataBaseManager {
 
     /**
      * 将内存中的数据写入到db文件中
-     * @param db　db
-     * @param dbFile 数据库文件夹
-     * @param charset　编码
-     * @throws DataBaseException　e
+     *
+     * @param db      　db
+     * @param dbFile  数据库文件夹
+     * @param charset 　编码
+     * @throws DataBaseException 　e
      */
     private void writeTables(MemDB db, File dbFile, String charset) throws DataBaseException {
         //所有的表　--> 子文件
@@ -96,11 +99,13 @@ public class MemDBManager implements IDataBaseManager {
                 try {
                     File child = new File(dbFile, tbName);
                     bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(child), charset));
-                    List<String> rowData = tables.get(tbName).getRowData();
+                    List<List<String>> rowData = tables.get(tbName).getRowData();
                     if (!rowData.isEmpty()) {
-                        for (String row : rowData) {
-                            bw.write(row + "\n");
-                            bw.flush();
+                        for (List<String> rowList : rowData) {
+                            for (String row : rowList) {
+                                bw.write(row + "\n");
+                                bw.flush();
+                            }
                         }
                     }
                 } catch (FileNotFoundException e) {

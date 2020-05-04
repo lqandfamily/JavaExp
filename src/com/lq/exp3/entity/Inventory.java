@@ -54,4 +54,14 @@ public class Inventory {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Inventory{" +
+                "itemNumber='" + itemNumber + '\'' +
+                ", quantity=" + quantity +
+                ", supplier='" + supplier + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

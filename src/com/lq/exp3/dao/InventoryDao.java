@@ -2,7 +2,15 @@ package com.lq.exp3.dao;
 
 import com.lq.exp3.entity.Inventory;
 
+import java.util.List;
+
 public interface InventoryDao {
+
+    /**
+     * 查找所有
+     * @return list
+     */
+    List<Inventory> selAll();
 
     /**
      * 根据itemId查询

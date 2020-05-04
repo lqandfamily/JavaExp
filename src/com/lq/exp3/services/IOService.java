@@ -1,6 +1,10 @@
 package com.lq.exp3.services;
 
+import com.lq.exp3.db.excption.DataBaseException;
 import com.lq.exp3.entity.Inventory;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 进出货服务
@@ -29,9 +33,10 @@ public interface IOService {
      *
      * @param itemId   　货物编号
      * @param customId 　客户编号
+     * @param quantity 货物数量
      * @return 操作结果码
      */
-    int outCargo(String itemId, String customId);
+    int outCargo(String itemId, String customId, int quantity) throws DataBaseException;
 
     /**
      * 货物入仓
@@ -39,10 +44,11 @@ public interface IOService {
      * 数量=到货单中的数量）。注意：如果在Transactions.txt文件中，到货单出现在发货单之后，到货单中的货物数量可以用来填补发货单中的数量（可以
      * 理解成在Transactions.txt中，优先处理到货单）。
      *
-     * @param itemId 　货物编号
+     * @param itemId   　货物编号
+     * @param quantity 货物数量
      * @return 操作结果码
      */
-    int inCargo(String itemId);
+    int inCargo(String itemId, int quantity);
 
 
     /**
@@ -65,5 +71,30 @@ public interface IOService {
      * @return 操作结果码
      */
     int delCargo(String itemId);
+
+    /**
+     * 读取货物单
+     *
+     * @param filePath 订单文件路径
+     * @param encode   文件编码
+     * @return list
+     */
+    List<String> readOfferSheet(String filePath, String encode) throws IOException;
+
+    /**
+     * 分配订单订单给对应的方法处理
+     *
+     * @return 操作结果码
+     */
+    int disSheet(List<String> list) throws DataBaseException;
+
+    /**
+     * 处理订单，外部调用应该从此处开始！！！
+     *
+     * @param filePath 订单文件路径
+     * @param encode   文件编码
+     * @return 操作结果码
+     */
+    int handlerSheet(String filePath, String encode) throws IOException, DataBaseException;
 
 }

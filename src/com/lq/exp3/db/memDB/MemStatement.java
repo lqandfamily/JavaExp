@@ -5,13 +5,13 @@ import com.lq.exp3.db.IStatement;
 import com.lq.exp3.db.IWhereCallback;
 import com.lq.exp3.entity.Inventory;
 
-import java.io.*;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
+import java.util.zip.ZipInputStream;
+
 
 public class MemStatement<E> extends IStatement<E> {
     private MemTable table;
+
 
     public MemStatement(MemTable table) {
         this.table = table;
@@ -20,30 +20,33 @@ public class MemStatement<E> extends IStatement<E> {
 
     @Override
     public IResult<E> executeSelAll() {
-        List<String> rowData = table.getRowData();
-        //做一个简单测试
-        for (String str: rowData){
-            System.out.println("***********: " + str);
-        }
-
+        List<List<String>> rowData = table.getRowData();
         /*
-         * 反射装配数据
+         * todo:反射装配数据
          */
+        IResult<Inventory> result = new MemResult<>();
 
-        for (String str: rowData){
-//            Class <E> entityClass = (Class <E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-//             获取 Main 的超类 SuperClass 的签名(携带泛型). 这里为: xxx.xxx.xxx.SuperClass<xxx.xxx.xxx.User>
-            Class<? extends Type[]> aClass = MemStatement.class.getGenericInterfaces().getClass();
-//             强转成 参数化类型 实体.
-            Class<MemStatement> memStatementClass = MemStatement.class;
-            System.out.println(memStatementClass.getSimpleName());
+        for (List<String> rowList : rowData) {
+            for (String str : rowList) {
+                String[] split = str.split("\\s+");
+                Inventory inventory = new Inventory(split[0], Integer.parseInt(split[1]), split[2], split[3]);
+                result.add(inventory);
+            }
         }
-        return null;
+        return (IResult<E>) result;
     }
 
     @Override
     public IResult<E> executeSel(IWhereCallback where) {
-        return null;
+        IResult<E> result = new MemResult<>();
+        IResult<E> all = executeSelAll();
+        E next = null;
+        while ((next = all.next()) != null) {
+            if (where.where(next)) {
+                result.add(next);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -51,8 +54,30 @@ public class MemStatement<E> extends IStatement<E> {
         return null;
     }
 
+
     @Override
-    public IResult<E> executeUpd(IWhereCallback where) {
+    public IResult<E> executeUpd(IWhereCallback where, E obj) {
+        IResult<E> result = executeSelAll();
+        //把所有的数据记录回调给用户
+        if (table.getTbName().equals("Inventory")) {
+            Inventory inventory = (Inventory) obj;
+            IResult<Inventory> all = (IResult<Inventory>) executeSelAll();
+            //通过条件进行对比
+            Inventory item = null;
+            while ((item = all.next()) != null) {
+                if (where.where(item)) {
+                    //更新记录
+
+
+/*
+                    String row = inventory.getItemNumber() + "      " + inventory.getQuantity() + "      " +
+                            inventory.getSupplier() + "      " + (inventory.getDescription() == null ?
+                            rowData.get(i).split("\\s+")[3] : inventory.getDescription());
+*/
+                }
+            }
+        }
+
         return null;
     }
 
@@ -60,4 +85,6 @@ public class MemStatement<E> extends IStatement<E> {
     public IResult<E> executeDel(IWhereCallback where) {
         return null;
     }
+
+
 }

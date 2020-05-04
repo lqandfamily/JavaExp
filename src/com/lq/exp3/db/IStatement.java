@@ -27,12 +27,13 @@ public abstract class IStatement<E> {
      */
     public abstract IResult<E> executeAdd(E obj);
 
+
     /**
-     * 根据条件更新一个或多个
+     * 根据条件更新一个
      *
      * @param where 条件筛选回调
      */
-    public abstract IResult<E> executeUpd(IWhereCallback where);
+    public abstract IResult<E> executeUpd(IWhereCallback where, E obj);
 
     /**
      * 根据条件删除一个或多个
@@ -40,6 +41,5 @@ public abstract class IStatement<E> {
      * @param where 条件筛选回调
      */
     public abstract IResult<E> executeDel(IWhereCallback where);
-
 
 }

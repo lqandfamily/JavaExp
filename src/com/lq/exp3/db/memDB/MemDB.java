@@ -17,7 +17,7 @@ class MemDB {
     }
 
     /**
-     * 添加保到数据库中
+     * 添加表到数据库中
      * @param table 表
      */
     public void addTable(MemTable table){
@@ -51,8 +51,7 @@ class MemTable {
     //字段
     private List<String> fieldList;
     //所有行数据
-    private List<String> rowData;
-
+    private List<List<String>> rowData;
 
     public MemTable(String tbName) {
         this.tbName = tbName;
@@ -64,29 +63,38 @@ class MemTable {
      * 读取并设置字段
      */
     public void readField(){
-        String[] fieldStrArr = rowData.get(0).split("\\s+");
-        Collections.addAll(fieldList, fieldStrArr);
+        fieldList = rowData.get(0);
+        //移除在记录中的字段，避免污染数据
+        rowData.remove(0);
     }
 
     /**
      * 添加一行数据到表中
      *
-     * @param rowStr 　行数据
+     * @param rowList 　行数据
      */
-    public void addRow(String rowStr) {
-        rowData.add(rowStr);
-    }
-
-    public List<String> getRowData() {
-        return rowData;
-    }
-
-    public void setRowData(List<String> rowData) {
-        this.rowData = rowData;
+    public void addRow(List<String> rowList) {
+        rowData.add(rowList);
     }
 
     public String getTbName() {
         return tbName;
+    }
+
+    public List<String> getFieldList() {
+        return fieldList;
+    }
+
+    public void setFieldList(List<String> fieldList) {
+        this.fieldList = fieldList;
+    }
+
+    public List<List<String>> getRowData() {
+        return rowData;
+    }
+
+    public void setRowData(List<List<String>> rowData) {
+        this.rowData = rowData;
     }
 
     public void setTbName(String tbName) {
